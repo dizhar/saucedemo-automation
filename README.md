@@ -1111,6 +1111,10 @@ This project is licensed under the MIT License.
   - [`open_report.sh`](open_report.sh) - Quick report viewer
   - [`test_runner.py`](test_runner.py) - Parallel test runner
 
+- **Test Documentation**:
+
+  - [`manual_test_cases.docx`](manual_test_cases.docx) - Manual test cases documentation
+
 - **Documentation**:
 
   - [Behave Documentation](https://behave.readthedocs.io/)
