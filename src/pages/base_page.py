@@ -236,44 +236,6 @@ class BasePage:
         except TimeoutException:
             raise TimeoutException(f"Element {locator} still visible after {timeout} seconds")
 
-    def wait_for_url_contains(self, url_fragment: str, timeout: Optional[float] = None) -> bool:
-        """
-        Wait for URL to contain specific text
-        
-        Args:
-            url_fragment: Text that should be in URL
-            timeout: Maximum wait time in seconds
-            
-        Returns:
-            bool: True if URL contains the fragment
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            return WebDriverWait(self.driver, timeout).until(
-                EC.url_contains(url_fragment)
-            )
-        except TimeoutException:
-            raise TimeoutException(f"URL does not contain '{url_fragment}' within {timeout} seconds")
-
-    def wait_for_url_to_be(self, url: str, timeout: Optional[float] = None) -> bool:
-        """
-        Wait for URL to be exactly as specified
-        
-        Args:
-            url: Expected URL
-            timeout: Maximum wait time in seconds
-            
-        Returns:
-            bool: True if URL matches
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            return WebDriverWait(self.driver, timeout).until(
-                EC.url_to_be(url)
-            )
-        except TimeoutException:
-            raise TimeoutException(f"URL is not '{url}' within {timeout} seconds")
-
     def select_dropdown_by_text(self, locator, text, timeout=None):
         """
         Select dropdown option by visible text
@@ -300,30 +262,6 @@ class BasePage:
         select = Select(element)
         select.select_by_value(value)
 
-    def select_dropdown_by_index(self, locator, index, timeout=None):
-        """
-        Select dropdown option by index
-        
-        Args:
-            locator: Tuple of (By.TYPE, "locator_value")
-            index: Index of option to select (0-based)
-            timeout: Maximum wait time in seconds
-        """
-        element = self.find_element(locator, timeout)
-        select = Select(element)
-        select.select_by_index(index)
-
-    def hover_over_element(self, locator, timeout=None):
-        """
-        Hover over an element
-        
-        Args:
-            locator: Tuple of (By.TYPE, "locator_value")
-            timeout: Maximum wait time in seconds
-        """
-        element = self.find_element(locator, timeout)
-        self.actions.move_to_element(element).perform()
-
     def scroll_to_element(self, locator, timeout=None):
         """
         Scroll to an element
@@ -334,26 +272,6 @@ class BasePage:
         """
         element = self.find_element(locator, timeout)
         self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
-
-    def switch_to_frame(self, locator: Tuple, timeout: Optional[float] = None) -> None:
-        """
-        Switch to an iframe
-        
-        Args:
-            locator: Tuple of (By.TYPE, "locator_value") or frame index
-            timeout: Maximum wait time in seconds
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            WebDriverWait(self.driver, timeout).until(
-                EC.frame_to_be_available_and_switch_to_it(locator)
-            )
-        except TimeoutException:
-            raise TimeoutException(f"Frame {locator} not available within {timeout} seconds")
-
-    def switch_to_default_content(self):
-        """Switch back to default content from iframe"""
-        self.driver.switch_to.default_content()
 
     def get_current_url(self):
         """
@@ -372,69 +290,3 @@ class BasePage:
             str: Page title
         """
         return self.driver.title
-
-    def refresh_page(self):
-        """Refresh the current page"""
-        self.driver.refresh()
-
-    def navigate_back(self):
-        """Navigate back in browser history"""
-        self.driver.back()
-
-    def navigate_forward(self):
-        """Navigate forward in browser history"""
-        self.driver.forward()
-
-    def accept_alert(self, timeout: Optional[float] = None) -> None:
-        """
-        Accept JavaScript alert
-        
-        Args:
-            timeout: Maximum wait time in seconds
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            alert = WebDriverWait(self.driver, timeout).until(EC.alert_is_present())
-            alert.accept()
-        except TimeoutException:
-            raise TimeoutException(f"Alert not present within {timeout} seconds")
-
-    def dismiss_alert(self, timeout: Optional[float] = None) -> None:
-        """
-        Dismiss JavaScript alert
-        
-        Args:
-            timeout: Maximum wait time in seconds
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            alert = WebDriverWait(self.driver, timeout).until(EC.alert_is_present())
-            alert.dismiss()
-        except TimeoutException:
-            raise TimeoutException(f"Alert not present within {timeout} seconds")
-
-    def get_alert_text(self, timeout: Optional[float] = None) -> str:
-        """
-        Get text from JavaScript alert
-        
-        Args:
-            timeout: Maximum wait time in seconds
-            
-        Returns:
-            str: Alert text
-        """
-        timeout = timeout if timeout is not None else self.timeout
-        try:
-            alert = WebDriverWait(self.driver, timeout).until(EC.alert_is_present())
-            return alert.text
-        except TimeoutException:
-            raise TimeoutException(f"Alert not present within {timeout} seconds")
-
-    def take_screenshot(self, filepath):
-        """
-        Take screenshot and save to file
-        
-        Args:
-            filepath: Path where screenshot should be saved
-        """
-        self.driver.save_screenshot(filepath)

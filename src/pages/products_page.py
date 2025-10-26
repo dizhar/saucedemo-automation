@@ -24,23 +24,17 @@ class ProductsPage(BasePage):
     MENU_BUTTON = (By.ID, "react-burger-menu-btn")
     MENU_CLOSE_BUTTON = (By.ID, "react-burger-cross-btn")
     LOGOUT_LINK = (By.ID, "logout_sidebar_link")
-    ALL_ITEMS_LINK = (By.ID, "inventory_sidebar_link")
-    ABOUT_LINK = (By.ID, "about_sidebar_link")
-    RESET_APP_LINK = (By.ID, "reset_sidebar_link")
     
     # Product Sorting
     PRODUCT_SORT_CONTAINER = (By.CLASS_NAME, "product_sort_container")
     
     # Product Container
     INVENTORY_CONTAINER = (By.ID, "inventory_container")
-    INVENTORY_LIST = (By.CLASS_NAME, "inventory_list")
     INVENTORY_ITEM = (By.CLASS_NAME, "inventory_item")
-    
+
     # Product Item Elements
     INVENTORY_ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
-    INVENTORY_ITEM_DESC = (By.CLASS_NAME, "inventory_item_desc")
     INVENTORY_ITEM_PRICE = (By.CLASS_NAME, "inventory_item_price")
-    INVENTORY_ITEM_IMG = (By.CLASS_NAME, "inventory_item_img")
     
     # Add to Cart Buttons
     ADD_TO_CART_BACKPACK = (By.ID, "add-to-cart-sauce-labs-backpack")
@@ -59,10 +53,10 @@ class ProductsPage(BasePage):
     REMOVE_TSHIRT_RED = (By.ID, "remove-test.allthethings()-t-shirt-(red)")
     
     # Footer
-    FOOTER = (By.CLASS_NAME, "footer")
-    SOCIAL_TWITTER = (By.CSS_SELECTOR, "a[data-test='social-twitter']")
-    SOCIAL_FACEBOOK = (By.CSS_SELECTOR, "a[data-test='social-facebook']")
-    SOCIAL_LINKEDIN = (By.CSS_SELECTOR, "a[data-test='social-linkedin']")
+    # FOOTER = (By.CLASS_NAME, "footer")
+    # SOCIAL_TWITTER = (By.CSS_SELECTOR, "a[data-test='social-twitter']")
+    # SOCIAL_FACEBOOK = (By.CSS_SELECTOR, "a[data-test='social-facebook']")
+    # SOCIAL_LINKEDIN = (By.CSS_SELECTOR, "a[data-test='social-linkedin']")
 
     def __init__(self, driver: WebDriver, timeout: float = 10):
         """
@@ -169,18 +163,6 @@ class ProductsPage(BasePage):
         self.open_menu()
         self.click(self.LOGOUT_LINK)
 
-    def click_all_items(self) -> None:
-        """Click All Items link from the menu"""
-        self.click(self.ALL_ITEMS_LINK)
-
-    def click_about(self) -> None:
-        """Click About link from the menu"""
-        self.click(self.ABOUT_LINK)
-
-    def click_reset_app_state(self) -> None:
-        """Click Reset App State from the menu"""
-        self.click(self.RESET_APP_LINK)
-
     # Product Sorting Methods
     def select_sort_option(self, option: str) -> None:
         """
@@ -190,15 +172,6 @@ class ProductsPage(BasePage):
             option: Sort option text (e.g., "Name (A to Z)", "Price (low to high)")
         """
         self.select_dropdown_by_text(self.PRODUCT_SORT_CONTAINER, option)
-
-    def select_sort_by_value(self, value: str) -> None:
-        """
-        Select a sorting option by value
-        
-        Args:
-            value: Sort option value (e.g., "az", "za", "lohi", "hilo")
-        """
-        self.select_dropdown_by_value(self.PRODUCT_SORT_CONTAINER, value)
 
     # Product Methods
     def get_all_product_names(self) -> List[str]:
@@ -219,16 +192,6 @@ class ProductsPage(BasePage):
             List[str]: List of product prices
         """
         elements = self.find_elements(self.INVENTORY_ITEM_PRICE)
-        return [element.text for element in elements]
-
-    def get_all_product_descriptions(self) -> List[str]:
-        """
-        Get all product descriptions displayed on the page
-        
-        Returns:
-            List[str]: List of product descriptions
-        """
-        elements = self.find_elements(self.INVENTORY_ITEM_DESC)
         return [element.text for element in elements]
 
     def get_product_count(self) -> int:
@@ -326,28 +289,3 @@ class ProductsPage(BasePage):
         button_id = "remove-" + product_name.lower().replace(" ", "-").replace("(", "").replace(")", "")
         remove_button_locator = (By.ID, button_id)
         return self.is_displayed(remove_button_locator)
-
-    # Social Media Methods
-    def click_twitter_link(self) -> None:
-        """Click Twitter social media link in footer"""
-        self.scroll_to_element(self.SOCIAL_TWITTER)
-        self.click(self.SOCIAL_TWITTER)
-
-    def click_facebook_link(self) -> None:
-        """Click Facebook social media link in footer"""
-        self.scroll_to_element(self.SOCIAL_FACEBOOK)
-        self.click(self.SOCIAL_FACEBOOK)
-
-    def click_linkedin_link(self) -> None:
-        """Click LinkedIn social media link in footer"""
-        self.scroll_to_element(self.SOCIAL_LINKEDIN)
-        self.click(self.SOCIAL_LINKEDIN)
-
-    def is_footer_displayed(self) -> bool:
-        """
-        Check if footer is displayed
-        
-        Returns:
-            bool: True if footer is displayed
-        """
-        return self.is_displayed(self.FOOTER)

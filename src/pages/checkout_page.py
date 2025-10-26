@@ -14,17 +14,15 @@ class CheckoutPage(BasePage):
     ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
     
     # Checkout Overview Page Locators
-    CART_ITEMS = (By.CLASS_NAME, "cart_item")
     SUBTOTAL_LABEL = (By.CLASS_NAME, "summary_subtotal_label")
     TAX_LABEL = (By.CLASS_NAME, "summary_tax_label")
     TOTAL_LABEL = (By.CLASS_NAME, "summary_total_label")
     FINISH_BUTTON = (By.ID, "finish")
-    
+
     # Checkout Complete Page Locators
     COMPLETE_HEADER = (By.CLASS_NAME, "complete-header")
     COMPLETE_TEXT = (By.CLASS_NAME, "complete-text")
     BACK_HOME_BUTTON = (By.ID, "back-to-products")
-    PONY_EXPRESS_IMAGE = (By.CLASS_NAME, "pony_express")
     
     def __init__(self, driver):
         super().__init__(driver)

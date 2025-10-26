@@ -203,49 +203,5 @@ class TestDataLoader:
         
         return self._checkout_data
     
-    def get_checkout_data_by_description(self, description: str) -> Optional[Dict[str, Any]]:
-        """
-        Get checkout customer data by description
-        
-        Args:
-            description (str): Description to search for (e.g., 'Standard US customer')
-        
-        Returns:
-            dict: Customer data matching the description, or None if not found
-        
-        Example:
-            >>> test_data.get_checkout_data_by_description('Standard US customer')
-            {'first_name': 'John', 'last_name': 'Doe', 'postal_code': '12345', ...}
-        """
-        if self._checkout_data is None:
-            return None
-        
-        for customer in self._checkout_data:
-            if customer.get('description', '').lower() == description.lower():
-                return customer
-        
-        print(f"Warning: No customer found with description: '{description}'")
-        return None
-    
-    def get_all_checkout_customers(self) -> List[Dict[str, Any]]:
-        """
-        Get all checkout customer data
-        
-        Returns:
-            list: List of all customer dictionaries
-        """
-        return self._checkout_data if self._checkout_data is not None else []
-    
-    def reload_checkout_data(self):
-        """Reload checkout data from CSV (useful for testing or dynamic updates)"""
-        self._checkout_data = None
-        self._load_checkout_data()
-    
-    def reload_users_data(self):
-        """Reload users data from JSON (useful for testing or dynamic updates)"""
-        self._users_data = None
-        self._load_users_data()
-
-
 # Singleton instance
 test_data = TestDataLoader()

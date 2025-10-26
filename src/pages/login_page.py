@@ -17,10 +17,7 @@ class LoginPage(BasePage):
     PASSWORD_INPUT = (By.ID, "password")
     LOGIN_BUTTON = (By.ID, "login-button")
     ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[data-test='error']")
-    ERROR_BUTTON = (By.CSS_SELECTOR, "button.error-button")
     LOGIN_LOGO = (By.CLASS_NAME, "login_logo")
-    LOGIN_CREDENTIALS = (By.ID, "login_credentials")
-    LOGIN_PASSWORD = (By.CLASS_NAME, "login_password")
 
     def __init__(self, driver: WebDriver, timeout: float = 10):
         """
@@ -88,9 +85,9 @@ class LoginPage(BasePage):
         """
         return self.is_displayed(self.ERROR_MESSAGE)
 
-    def click_error_close_button(self) -> None:
-        """Click the error message close button"""
-        self.click(self.ERROR_BUTTON)
+    # def click_error_close_button(self) -> None:
+    #     """Click the error message close button"""
+    #     self.click(self.ERROR_BUTTON)
 
     def is_login_button_displayed(self) -> bool:
         """
@@ -110,61 +107,6 @@ class LoginPage(BasePage):
         """
         return self.is_displayed(self.LOGIN_LOGO) and self.is_displayed(self.LOGIN_BUTTON)
 
-    def get_username_placeholder(self) -> Optional[str]:
-        """
-        Get the placeholder text of username field
-        
-        Returns:
-            str: Placeholder text
-        """
-        return self.get_attribute(self.USERNAME_INPUT, "placeholder")
-
-    def get_password_placeholder(self) -> Optional[str]:
-        """
-        Get the placeholder text of password field
-        
-        Returns:
-            str: Placeholder text
-        """
-        return self.get_attribute(self.PASSWORD_INPUT, "placeholder")
-
-    def clear_username(self) -> None:
-        """Clear the username input field"""
-        element = self.find_element(self.USERNAME_INPUT)
-        element.clear()
-
-    def clear_password(self) -> None:
-        """Clear the password input field"""
-        element = self.find_element(self.PASSWORD_INPUT)
-        element.clear()
-
-    def is_username_field_enabled(self) -> bool:
-        """
-        Check if username field is enabled
-        
-        Returns:
-            bool: True if enabled, False otherwise
-        """
-        return self.is_enabled(self.USERNAME_INPUT)
-
-    def is_password_field_enabled(self) -> bool:
-        """
-        Check if password field is enabled
-        
-        Returns:
-            bool: True if enabled, False otherwise
-        """
-        return self.is_enabled(self.PASSWORD_INPUT)
-
-    def is_login_button_enabled(self) -> bool:
-        """
-        Check if login button is enabled
-        
-        Returns:
-            bool: True if enabled, False otherwise
-        """
-        return self.is_enabled(self.LOGIN_BUTTON)
-
     def wait_for_login_page_to_load(self, timeout: Optional[float] = None) -> None:
         """
         Wait for login page to fully load
@@ -174,21 +116,3 @@ class LoginPage(BasePage):
         """
         self.wait_for_element_visible(self.LOGIN_LOGO, timeout)
         self.wait_for_element_visible(self.LOGIN_BUTTON, timeout)
-
-    def get_login_credentials_text(self) -> str:
-        """
-        Get the accepted usernames text from the login page
-        
-        Returns:
-            str: Text containing accepted usernames
-        """
-        return self.get_text(self.LOGIN_CREDENTIALS)
-
-    def get_login_password_text(self) -> str:
-        """
-        Get the password text from the login page
-        
-        Returns:
-            str: Text containing password information
-        """
-        return self.get_text(self.LOGIN_PASSWORD)

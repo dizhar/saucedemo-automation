@@ -7,10 +7,8 @@ class CartPage(BasePage):
     
     # Locators
     CART_ITEMS = (By.CLASS_NAME, "cart_item")
-    CART_QUANTITY = (By.CLASS_NAME, "cart_quantity")
     CONTINUE_SHOPPING_BUTTON = (By.ID, "continue-shopping")
     CHECKOUT_BUTTON = (By.ID, "checkout")
-    CART_LIST = (By.CLASS_NAME, "cart_list")
     
     # Dynamic locators
     REMOVE_BUTTON_TEMPLATE = "//div[text()='{}']/ancestor::div[@class='cart_item']//button"
