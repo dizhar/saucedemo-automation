@@ -111,8 +111,8 @@ def run_feature(feature_file, use_allure=False):
         os.makedirs(pid_dir, exist_ok=True)
         cmd.extend(['--format', 'allure_behave.formatter:AllureFormatter', '--outfile', pid_dir])
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    return {'name': feature_file, 'returncode': result.returncode, 'stdout': result.stdout, 'stderr': result.stderr}
+    result = subprocess.run(cmd, text=True)
+    return {'name': feature_file, 'returncode': result.returncode}
 
 
 def get_scenarios(feature_file):
@@ -139,8 +139,8 @@ def run_scenario(scenario_info, use_allure=False):
         os.makedirs(pid_dir, exist_ok=True)
         cmd.extend(['--format', 'allure_behave.formatter:AllureFormatter', '--outfile', pid_dir])
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    return {'name': scenario_info['name'], 'returncode': result.returncode, 'stdout': result.stdout, 'stderr': result.stderr}
+    result = subprocess.run(cmd, text=True)
+    return {'name': scenario_info['name'], 'returncode': result.returncode}
 
 
 # =============================================================================
@@ -193,8 +193,6 @@ def main():
                 else:
                     failed.append(result['name'])
                     print(f"❌ FAILED: {result['name']}")
-                    if result['stderr']:
-                        print(result['stderr'][:500])
 
     else:
         feature_files = glob.glob('features/*.feature')
@@ -215,7 +213,6 @@ def main():
                 else:
                     failed.append(result['name'])
                     print(f"❌ FAILED: {result['name']}")
-                    print(result['stdout'])
 
     # Summary
     print("="*80)
