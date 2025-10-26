@@ -12,9 +12,6 @@ from src.pages.base_page import BasePage
 class LoginPage(BasePage):
     """Page Object Model for SauceDemo Login Page"""
 
-    # URL
-    URL = "https://www.saucedemo.com/"
-
     # Locators
     USERNAME_INPUT = (By.ID, "user-name")
     PASSWORD_INPUT = (By.ID, "password")
@@ -37,7 +34,7 @@ class LoginPage(BasePage):
 
     def navigate_to_login_page(self) -> None:
         """Navigate to the login page"""
-        self.driver.get(self.URL)
+        self.driver.get(self.base_url)
 
     def enter_username(self, username: str) -> None:
         """

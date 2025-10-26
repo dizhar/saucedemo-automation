@@ -15,9 +15,6 @@ from src.utils.logger import logger
 class ProductsPage(BasePage):
     """Page Object Model for SauceDemo Products/Inventory Page"""
 
-    # URL
-    URL = "https://www.saucedemo.com/inventory.html"
-
     # Header Locators
     APP_LOGO = (By.CLASS_NAME, "app_logo")
     SHOPPING_CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
