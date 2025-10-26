@@ -101,10 +101,10 @@ saucedemo-automation/
 │   │   ├── cart_steps.py        # Cart step definitions
 │   │   ├── checkout_steps.py    # Checkout step definitions
 │   │   └── common_steps.py      # Shared step definitions
-│   ├── login.feature            # Login test scenarios (20 tests)
-│   ├── products.feature         # Products test scenarios (41 tests)
-│   ├── cart.feature             # Cart test scenarios (32 tests)
-│   └── checkout.feature         # Checkout test scenarios (32 tests)
+│   ├── login.feature            # Login test scenarios (22 tests)
+│   ├── products.feature         # Products test scenarios (6 tests)
+│   ├── cart.feature             # Cart test scenarios (4 tests)
+│   └── checkout.feature         # Checkout test scenarios (4 tests)
 │
 ├── src/                          # Source code
 │   ├── pages/                   # Page Object Models
@@ -494,7 +494,7 @@ python test_runner.py --workers 4 --report --clean
 
 ### Benefits of Parallel Execution
 
-- ⚡ **Faster Execution**: Run 125+ tests in minutes instead of hours
+- ⚡ **Faster Execution**: Run 36 tests in minutes instead of hours
 - 🔄 **Better Resource Usage**: Utilize all CPU cores
 - 📊 **Automatic Merging**: Results from all workers are automatically merged
 - 🎯 **Flexible Granularity**: Run by features or individual scenarios
@@ -600,20 +600,18 @@ grep "Failed" logs/test_execution.log
 
 | Feature      | Scenarios | Test Cases | Coverage                       |
 | ------------ | --------- | ---------- | ------------------------------ |
-| **Login**    | 11        | ~20        | Authentication, Error handling |
-| **Products** | 29        | ~41        | Browsing, Sorting, Navigation  |
-| **Cart**     | 21        | ~32        | Add/Remove, Badge, Persistence |
-| **Checkout** | 21        | ~32        | Form validation, Order flow    |
-| **TOTAL**    | **82**    | **~125**   | **End-to-End Coverage**        |
+| **Login**    | 14        | 22         | Authentication, Error handling |
+| **Products** | 6         | 6          | Browsing, Sorting, Navigation  |
+| **Cart**     | 4         | 4          | Add/Remove, Badge, Persistence |
+| **Checkout** | 4         | 4          | Form validation, Order flow    |
+| **TOTAL**    | **28**    | **36**     | **End-to-End Coverage**        |
 
 ### Test Categories
 
-- 🟢 **Smoke Tests** (8 scenarios): Critical path validation
-- 🟢 **Positive Tests** (60+ scenarios): Happy path scenarios
-- 🔴 **Negative Tests** (15+ scenarios): Error handling and validation
-- 🔵 **Workflow Tests** (4 scenarios): End-to-end user journeys
-- 🟡 **Integration Tests** (5 scenarios): Cross-feature testing
-- ⚠️ **Edge Cases** (8 scenarios): Boundary conditions
+- 🟢 **Smoke Tests**: Critical path validation
+- 🟢 **Positive Tests**: Happy path scenarios
+- 🔴 **Negative Tests**: Error handling and validation
+- 🔵 **Workflow Tests**: End-to-end user journeys
 
 ---
 
@@ -989,7 +987,7 @@ This project is licensed under the MIT License.
 
 This framework provides:
 
-✅ **Complete BDD Testing Solution** - 125+ tests covering full e-commerce workflow
+✅ **Complete BDD Testing Solution** - 36 tests covering full e-commerce workflow
 ✅ **Parallel Execution** - Run tests 4-8x faster with built-in parallel runner
 ✅ **Docker Support** - One-command execution with `./run_docker_tests.sh`
 ✅ **Beautiful Reports** - Interactive Allure reports with screenshots
