@@ -1,0 +1,82 @@
+{
+  "valid_users": [
+    {
+      "username": "standard_user",
+      "password": "secret_sauce",
+      "description": "Standard user with full access",
+      "expected_result": "success"
+    },
+    {
+      "username": "problem_user",
+      "password": "secret_sauce",
+      "description": "User with issues (e.g., image loading problems)",
+      "expected_result": "success"
+    },
+    {
+      "username": "performance_glitch_user",
+      "password": "secret_sauce",
+      "description": "User that experiences performance issues",
+      "expected_result": "success"
+    },
+    {
+      "username": "error_user",
+      "password": "secret_sauce",
+      "description": "User that encounters errors",
+      "expected_result": "success"
+    },
+    {
+      "username": "visual_user",
+      "password": "secret_sauce",
+      "description": "User for visual testing",
+      "expected_result": "success"
+    }
+  ],
+  "locked_users": [
+    {
+      "username": "locked_out_user",
+      "password": "secret_sauce",
+      "description": "User that has been locked out",
+      "expected_error": "Epic sadface: Sorry, this user has been locked out."
+    }
+  ],
+  "invalid_credentials": [
+    {
+      "username": "invalid_user",
+      "password": "secret_sauce",
+      "description": "Invalid username with valid password",
+      "expected_error": "Epic sadface: Username and password do not match any user in this service"
+    },
+    {
+      "username": "standard_user",
+      "password": "wrong_password",
+      "description": "Valid username with invalid password",
+      "expected_error": "Epic sadface: Username and password do not match any user in this service"
+    },
+    {
+      "username": "invalid_user",
+      "password": "wrong_password",
+      "description": "Invalid username and password",
+      "expected_error": "Epic sadface: Username and password do not match any user in this service"
+    }
+  ],
+  "empty_credentials": [
+    {
+      "username": "",
+      "password": "secret_sauce",
+      "description": "Empty username with valid password",
+      "expected_error": "Epic sadface: Username is required"
+    },
+    {
+      "username": "standard_user",
+      "password": "",
+      "description": "Valid username with empty password",
+      "expected_error": "Epic sadface: Password is required"
+    },
+    {
+      "username": "",
+      "password": "",
+      "description": "Empty username and password",
+      "expected_error": "Epic sadface: Username is required"
+    }
+  ]
+}

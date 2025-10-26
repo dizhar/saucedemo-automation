@@ -1,0 +1,26 @@
+{
+  "venvPath": ".",
+  "venv": "venv",
+  "extraPaths": [
+    "src",
+    "venv/lib/python3.9/site-packages"
+  ],
+  "include": [
+    "src",
+    "features"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    ".git",
+    "venv/bin",
+    "venv/include"
+  ],
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+  "pythonVersion": "3.9",
+  "pythonPlatform": "Darwin",
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "stubPath": ""
+}

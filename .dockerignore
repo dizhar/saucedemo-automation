@@ -1,0 +1,38 @@
+# Virtual environment
+venv/
+env/
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Test reports and artifacts
+reports/
+screenshots/
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ChromeDriver cache
+.wdm/
+
+# Misc
+*.bak
+*.tmp

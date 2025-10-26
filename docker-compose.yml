@@ -1,0 +1,24 @@
+services:
+  saucedemo-tests:
+    build: .
+    container_name: saucedemo-automation
+    restart: "no"
+    volumes:
+      - ./reports:/app/reports
+      - ./screenshots:/app/screenshots
+      - ./logs:/app/logs
+    environment:
+      - BROWSER=chrome
+      - HEADLESS=true
+      - SCREENSHOT_ON_FAILURE=true
+      - IMPLICIT_WAIT=10
+      - PAGE_LOAD_TIMEOUT=30
+      - MAXIMIZE_WINDOW=true
+    command: >
+      bash -c "
+        behave --tags=@smoke 
+        -f allure_behave.formatter:AllureFormatter -o reports/allure-results
+        -f behave_html_formatter:HTMLFormatter -o reports/report.html
+        -f json.pretty -o reports/report.json
+        --no-capture
+      "
