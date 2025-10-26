@@ -34,12 +34,14 @@ behave -f pretty
 ```
 
 **With Docker (Fastest):**
+
 ```bash
 # One command to run all tests in parallel with beautiful reports
 ./run_docker_tests.sh --workers 8
 ```
 
 **View Test Reports:**
+
 ```bash
 # Open the latest report
 ./open_report.sh
@@ -247,26 +249,10 @@ SCRIPT_TIMEOUT=30                 # Script execution timeout
 SCREENSHOT_ON_FAILURE=true        # Capture screenshot on failure
 SCREENSHOT_ON_SUCCESS=false       # Capture screenshot on success
 
-# Application URLs
-BASE_URL=https://www.saucedemo.com
-
-# Test Users (from SauceDemo)
-STANDARD_USER=standard_user
-STANDARD_PASSWORD=secret_sauce
-LOCKED_OUT_USER=locked_out_user
-PROBLEM_USER=problem_user
-PERFORMANCE_GLITCH_USER=performance_glitch_user
-ERROR_USER=error_user
-VISUAL_USER=visual_user
-
-# Browser Options
-CHROME_OPTIONS=--disable-extensions,--disable-gpu,--no-sandbox
-FIREFOX_OPTIONS=--width=1920,--height=1080
-
 # Directories
-REPORTS_DIR=reports
-SCREENSHOTS_DIR=screenshots
-LOGS_DIR=logs
+LOG_LEVEL=info
+
+ENVIRONMENT=test                 # dev, test, staging, prod
 ```
 
 ---
@@ -418,6 +404,7 @@ The easiest way to run tests in Docker with parallel execution and automatic All
 ```
 
 The script will:
+
 - 🔨 Build the Docker image
 - 🧪 Run tests in parallel (default: 4 workers)
 - 📊 Merge results from parallel workers
@@ -524,6 +511,7 @@ python test_runner.py --workers 4 --report --clean
 ```
 
 This script will:
+
 - ✅ Check if report exists
 - 🚀 Open with Allure CLI (if installed)
 - 🌐 Or start a local web server and open in browser
@@ -716,6 +704,7 @@ The framework includes several helper scripts for easier workflow:
 Complete Docker-based test execution with parallel processing and automatic reporting.
 
 **Features:**
+
 - Automatically builds Docker image
 - Runs tests in parallel (configurable workers)
 - Merges results from parallel workers
@@ -723,6 +712,7 @@ Complete Docker-based test execution with parallel processing and automatic repo
 - Opens report in browser
 
 **Usage:**
+
 ```bash
 ./run_docker_tests.sh --help
 ./run_docker_tests.sh --workers 8
@@ -735,6 +725,7 @@ Complete Docker-based test execution with parallel processing and automatic repo
 Quick report viewer that works with or without Allure CLI.
 
 **Features:**
+
 - Checks if report exists
 - Opens with Allure CLI (preferred)
 - Falls back to Python HTTP server
@@ -742,6 +733,7 @@ Quick report viewer that works with or without Allure CLI.
 - Works on macOS, Linux, and Windows (Git Bash)
 
 **Usage:**
+
 ```bash
 ./open_report.sh
 ```
@@ -751,6 +743,7 @@ Quick report viewer that works with or without Allure CLI.
 Python-based parallel test runner for local development.
 
 **Features:**
+
 - Run tests by features or scenarios
 - Configurable parallel workers
 - Automatic result merging
@@ -758,6 +751,7 @@ Python-based parallel test runner for local development.
 - Clean previous results option
 
 **Usage:**
+
 ```bash
 python test_runner.py --help
 python test_runner.py --workers 8 --report
@@ -1112,11 +1106,13 @@ This project is licensed under the MIT License.
 ## 📚 Additional Resources
 
 - **Test Scripts**: All helper scripts are in the project root
+
   - [`run_docker_tests.sh`](run_docker_tests.sh) - Complete Docker test automation
   - [`open_report.sh`](open_report.sh) - Quick report viewer
   - [`test_runner.py`](test_runner.py) - Parallel test runner
 
 - **Documentation**:
+
   - [Behave Documentation](https://behave.readthedocs.io/)
   - [Selenium Documentation](https://selenium.dev/documentation/)
   - [Allure Framework](https://docs.qameta.io/allure/)
@@ -1143,6 +1139,7 @@ This framework provides:
 ✅ **Well Documented** - Comprehensive README and inline documentation
 
 **Get Started in 30 Seconds:**
+
 ```bash
 ./run_docker_tests.sh  # That's it!
 ```
