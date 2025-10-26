@@ -146,3 +146,5 @@ logs/
 
 # Test artifacts
 *.xml
+
+json.pretty.output
