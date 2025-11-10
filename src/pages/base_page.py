@@ -12,7 +12,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.support.select import Select
 from typing import Union
-from src.utils.config import Config
+from src.utils import config
 
 class BasePage:
     """Base class for all page objects"""
@@ -30,7 +30,7 @@ class BasePage:
         self.driver.implicitly_wait(timeout)  # Set implicit wait globally
         self.wait = WebDriverWait(driver, timeout)
         self.actions = ActionChains(driver)
-        self.base_url = Config.BASE_URL
+        self.base_url = config.BASE_URL
 
     def find_element(self, locator: Tuple, timeout: Optional[float] = None) -> WebElement:
         """
@@ -58,7 +58,7 @@ class BasePage:
         
         Args:
             locator: Tuple of (By.TYPE, "locator_value")
-            timeout: Maximum wait time in seconds (uses instance timeout if None)
+            timeout: Maximum wait time in sseconds (uses instance timeout if None)
             
         Returns:
             List[WebElement]: List of found elements
