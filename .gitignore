@@ -148,3 +148,10 @@ logs/
 *.xml
 
 json.pretty.output
+
+# ngrok
+ngrok.log
+ngrok.yml
+
+# Streamlit cache
+.streamlit/

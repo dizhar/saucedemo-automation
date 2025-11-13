@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies including Java (needed for Allure)
+RUN apt-get update && apt-get install -y \
+    wget \
+    default-jre \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Allure CLI
+RUN wget https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz && \
+    tar -zxvf allure-2.24.0.tgz -C /opt/ && \
+    ln -s /opt/allure-2.24.0/bin/allure /usr/bin/allure && \
+    rm allure-2.24.0.tgz
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Expose Streamlit port and Allure static server port
+EXPOSE 8501 8666
+
+# Run Streamlit (Render provides PORT env var, default to 8501 locally)
+CMD streamlit run demo_app_basic.py --server.address=0.0.0.0 --server.port=${PORT:-8501}

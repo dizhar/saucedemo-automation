@@ -3,9 +3,10 @@
 A comprehensive BDD (Behavior-Driven Development) test automation framework for [SauceDemo](https://www.saucedemo.com/) e-commerce application using Python, Behave, Selenium, and Allure reporting.
 
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Selenium](https://img.shields.io/badge/selenium-4.x-green.svg)](https://selenium.dev/)
+[![Selenium](https://img.shields.io/badge/selenium-4.15.2-green.svg)](https://selenium.dev/)
 [![Behave](https://img.shields.io/badge/behave-1.2.6-orange.svg)](https://behave.readthedocs.io/)
-[![Allure](https://img.shields.io/badge/allure-2.x-yellow.svg)](https://docs.qameta.io/allure/)
+[![Allure](https://img.shields.io/badge/allure-2.13.2-yellow.svg)](https://docs.qameta.io/allure/)
+[![Streamlit](https://img.shields.io/badge/streamlit-1.29.0-red.svg)](https://streamlit.io/)
 
 ---
 
@@ -15,7 +16,7 @@ Get up and running in 5 minutes:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/saucedemo-automation.git
+git clone https://github.com/dizhar/saucedemo-automation.git
 cd saucedemo-automation
 
 # 2. Install dependencies
@@ -47,6 +48,13 @@ behave -f pretty
 ./open_report.sh
 ```
 
+**Try the Live Demo:**
+
+```bash
+# Run interactive Streamlit demo (requires ngrok authtoken)
+./setup_demo.sh
+```
+
 ---
 
 ## 📋 Table of Contents
@@ -60,6 +68,7 @@ behave -f pretty
 - [Running Tests](#-running-tests)
 - [Docker Support](#-docker-support)
 - [Parallel Test Execution](#-parallel-test-execution)
+- [Live Demo](#-live-demo)
 - [Test Reports](#-test-reports)
 - [Test Coverage](#-test-coverage)
 - [Writing Tests](#-writing-tests)
@@ -77,7 +86,7 @@ behave -f pretty
 - 🌐 **Multi-Browser Support**: Chrome, Firefox, Edge, Safari
 - 📊 **Allure Reports**: Beautiful, interactive test reports with screenshots
 - 📸 **Auto Screenshots**: Captures screenshots on test failures
-- 📝 **Comprehensive Logging**: Detailed logs for debugging
+- 📝 **Comprehensive Logging**: Detailed logs for debugging with colorlog
 - 🔧 **Page Object Model**: Maintainable and scalable test architecture
 - ⚙️ **Environment Configuration**: Easy configuration via `.env` file
 - 🏷️ **Tag-Based Execution**: Run specific test suites (@smoke, @regression, etc.)
@@ -85,6 +94,9 @@ behave -f pretty
 - 🔄 **Parallel Execution**: Built-in parallel test runner for faster execution
 - 🐳 **Docker Support**: Fully containerized testing with automated reporting
 - 🎬 **One-Command Execution**: Complete test run + report generation with single script
+- 🎮 **Live Demo App**: Interactive Streamlit dashboard for running tests with ngrok integration
+- 🧪 **Test Data Management**: Faker library for dynamic test data generation
+- 📈 **Advanced Reporting**: Multiple report formats (Allure, HTML, JSON)
 
 ---
 
@@ -101,21 +113,26 @@ saucedemo-automation/
 │   │   ├── cart_steps.py        # Cart step definitions
 │   │   ├── checkout_steps.py    # Checkout step definitions
 │   │   └── common_steps.py      # Shared step definitions
-│   ├── login.feature            # Login test scenarios (22 tests)
-│   ├── products.feature         # Products test scenarios (6 tests)
-│   ├── cart.feature             # Cart test scenarios (4 tests)
-│   └── checkout.feature         # Checkout test scenarios (4 tests)
+│   ├── login.feature            # Login test scenarios
+│   ├── products.feature         # Products test scenarios
+│   ├── cart.feature             # Cart test scenarios
+│   └── checkout.feature         # Checkout test scenarios
 │
 ├── src/                          # Source code
 │   ├── pages/                   # Page Object Models
 │   │   ├── __init__.py
-│   │   ├── base_page.py        # Base page class
+│   │   ├── base_page.py        # Base page class with common methods
 │   │   ├── login_page.py       # Login page object
-│   │   └── products_page.py    # Products page object
+│   │   ├── products_page.py    # Products page object
+│   │   ├── cart_page.py        # Cart page object
+│   │   └── checkout_page.py    # Checkout page object
 │   └── utils/                   # Utility modules
 │       ├── __init__.py
 │       ├── config.py           # Configuration management
-│       └── logger.py           # Logging setup
+│       ├── logger.py           # Logging setup with colorlog
+│       ├── driver_factory.py   # WebDriver factory pattern
+│       ├── selenium_utils.py   # Selenium helper utilities
+│       └── test_data.py        # Test data management
 │
 ├── reports/                     # Test reports
 │   ├── allure-results/         # Allure test results (raw)
@@ -128,11 +145,16 @@ saucedemo-automation/
 ├── .env.example                 # Example environment file
 ├── behave.ini                   # Behave configuration
 ├── requirements.txt             # Python dependencies
-├── Dockerfile                   # Docker image configuration
+├── Dockerfile                   # Docker image for test execution
+├── Dockerfile.demo              # Docker image for live demo
 ├── docker-compose.yml           # Docker Compose configuration
+├── docker-compose.demo.yml      # Docker Compose for demo app
 ├── .dockerignore               # Docker ignore rules
 ├── test_runner.py              # Parallel test execution script
+├── parallel_runner.py          # Alternative parallel runner
 ├── run_docker_tests.sh         # Docker test runner with reporting
+├── setup_demo.sh               # Setup and run live demo
+├── demo_app_basic.py           # Streamlit live demo application
 ├── open_report.sh              # Open Allure reports easily
 ├── .gitignore                   # Git ignore rules
 ├── pyrightconfig.json          # Pylance configuration
@@ -190,7 +212,7 @@ choco install allure
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/saucedemo-automation.git
+git clone https://github.com/dizhar/saucedemo-automation.git
 cd saucedemo-automation
 ```
 
@@ -235,24 +257,33 @@ Edit the `.env` file to customize your test execution:
 BROWSER=chrome                    # chrome, firefox, edge, safari
 HEADLESS=false                    # Run browser in headless mode
 
-# Window Configuration
-MAXIMIZE_WINDOW=true              # Maximize browser window
-WINDOW_WIDTH=1920                 # Window width (if not maximized)
-WINDOW_HEIGHT=1080                # Window height (if not maximized)
-
-# Timeout Configuration
+# Timeouts (in seconds)
+DEFAULT_TIMEOUT=10                # Default timeout for elements
 IMPLICIT_WAIT=10                  # Implicit wait in seconds
 PAGE_LOAD_TIMEOUT=30              # Page load timeout
 SCRIPT_TIMEOUT=30                 # Script execution timeout
 
-# Screenshot Configuration
+# Window Settings
+MAXIMIZE_WINDOW=true              # Maximize browser window
+WINDOW_WIDTH=1920                 # Window width (if not maximized)
+WINDOW_HEIGHT=1080                # Window height (if not maximized)
+
+# Screenshots
 SCREENSHOT_ON_FAILURE=true        # Capture screenshot on failure
 SCREENSHOT_ON_SUCCESS=false       # Capture screenshot on success
 
-# Directories
-LOG_LEVEL=info
+# Logging
+LOG_LEVEL=INFO                    # DEBUG, INFO, WARNING, ERROR, CRITICAL
 
-ENVIRONMENT=test                 # dev, test, staging, prod
+# Reports
+HTML_REPORT=true                  # Generate HTML report
+ALLURE_REPORT=true                # Generate Allure report
+
+# Environment
+ENVIRONMENT=test                  # dev, test, staging, prod
+
+# Demo Configuration (ngrok)
+NGROK_AUTHTOKEN=                  # Your ngrok authtoken for live demo
 ```
 
 ---
@@ -458,7 +489,7 @@ docker-compose run saucedemo-tests behave --tags=@smoke -f pretty
 
 ## 🚀 Parallel Test Execution
 
-The framework includes a powerful parallel test runner (`test_runner.py`) for faster execution:
+The framework includes powerful parallel test runners (`test_runner.py` and `parallel_runner.py`) for faster execution:
 
 ### Run Tests in Parallel (Local)
 
@@ -494,10 +525,50 @@ python test_runner.py --workers 4 --report --clean
 
 ### Benefits of Parallel Execution
 
-- ⚡ **Faster Execution**: Run 36 tests in minutes instead of hours
+- ⚡ **Faster Execution**: Run tests in minutes instead of hours
 - 🔄 **Better Resource Usage**: Utilize all CPU cores
 - 📊 **Automatic Merging**: Results from all workers are automatically merged
 - 🎯 **Flexible Granularity**: Run by features or individual scenarios
+
+---
+
+## 🎮 Live Demo
+
+The framework includes an interactive Streamlit-based demo application for running tests with a web UI.
+
+### Setup Live Demo
+
+```bash
+# Option 1: Quick setup with script
+./setup_demo.sh
+
+# Option 2: Manual setup
+# 1. Get ngrok authtoken from https://dashboard.ngrok.com/get-started/your-authtoken
+# 2. Add to .env file:
+echo "NGROK_AUTHTOKEN=your_token_here" >> .env
+
+# 3. Run demo app
+streamlit run demo_app_basic.py
+
+# Option 3: Run with Docker
+docker-compose -f docker-compose.demo.yml up --build
+```
+
+### Demo Features
+
+- 🖥️ **Web-Based UI**: Run tests through an intuitive Streamlit interface
+- 🌐 **Public Access**: Ngrok integration for sharing demo with others
+- 🎯 **Selective Testing**: Choose specific test suites or scenarios
+- 📊 **Real-Time Results**: View test execution in real-time
+- 📈 **Interactive Reports**: Browse test results and reports in the browser
+- 🔧 **Configuration**: Modify test settings through the UI
+
+### Demo Requirements
+
+- Python 3.9+
+- Streamlit 1.29.0
+- Pyngrok 7.0.5
+- Ngrok authtoken (free account at https://ngrok.com)
 
 ---
 
@@ -756,6 +827,174 @@ python test_runner.py --workers 8 --report
 python test_runner.py --mode scenarios --serve
 ```
 
+### 4. `parallel_runner.py`
+
+Alternative parallel test execution script.
+
+**Features:**
+
+- Parallel test execution
+- Result aggregation
+- Flexible configuration
+
+**Usage:**
+
+```bash
+python parallel_runner.py
+```
+
+### 5. `setup_demo.sh`
+
+Quick setup and launch script for the Streamlit live demo.
+
+**Features:**
+
+- Validates ngrok token
+- Installs demo dependencies
+- Launches Streamlit app
+- Sets up ngrok tunnel
+
+**Usage:**
+
+```bash
+./setup_demo.sh
+```
+
+---
+
+## 🔄 CI/CD Integration
+
+The framework is designed for easy CI/CD integration using Docker.
+
+### GitHub Actions Example
+
+```yaml
+name: Run Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t saucedemo-tests .
+
+      - name: Run tests
+        run: |
+          docker run --rm \
+            -v $(pwd)/reports:/app/reports \
+            saucedemo-tests behave -f pretty
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          docker run --rm \
+            -v $(pwd)/reports:/app/reports \
+            saucedemo-tests allure generate reports/allure-results -o reports/allure-report
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: reports/
+```
+
+### Jenkins Pipeline Example
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'docker build -t saucedemo-tests .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh '''
+                    docker run --rm \
+                        -v $(pwd)/reports:/app/reports \
+                        saucedemo-tests behave -f pretty
+                '''
+            }
+        }
+
+        stage('Report') {
+            steps {
+                allure includeProperties: false,
+                       jdk: '',
+                       results: [[path: 'reports/allure-results']]
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'reports/**/*', allowEmptyArchive: true
+        }
+    }
+}
+```
+
+### GitLab CI Example
+
+```yaml
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - test
+  - report
+
+test:
+  stage: test
+  script:
+    - docker build -t saucedemo-tests .
+    - docker run --rm -v $(pwd)/reports:/app/reports saucedemo-tests behave -f pretty
+  artifacts:
+    when: always
+    paths:
+      - reports/
+    expire_in: 30 days
+
+report:
+  stage: report
+  script:
+    - docker run --rm -v $(pwd)/reports:/app/reports saucedemo-tests allure generate reports/allure-results -o reports/allure-report
+  dependencies:
+    - test
+  artifacts:
+    paths:
+      - reports/allure-report/
+```
+
+### Docker-based CI/CD Benefits
+
+- ✅ **Consistent Environment**: Same Docker image in dev and CI
+- ✅ **Easy Setup**: No need to install dependencies on CI server
+- ✅ **Parallel Execution**: Use `./run_docker_tests.sh` with workers
+- ✅ **Portable**: Works on any CI/CD platform with Docker support
+
 ---
 
 ## 🔧 Troubleshooting
@@ -881,6 +1120,26 @@ set HEADLESS=true     # Windows CMD
 $env:HEADLESS="true"  # Windows PowerShell
 ```
 
+#### 9. Live Demo Issues
+
+```bash
+# Issue: Ngrok authentication failed
+# Solution: Add valid ngrok token to .env
+# Get token from https://dashboard.ngrok.com/get-started/your-authtoken
+echo "NGROK_AUTHTOKEN=your_token_here" >> .env
+
+# Issue: Streamlit not starting
+# Solution: Ensure dependencies are installed
+pip install streamlit==1.29.0 pyngrok==7.0.5
+
+# Issue: Port already in use
+# Solution: Streamlit uses port 8501 by default
+streamlit run demo_app_basic.py --server.port 8502
+
+# Issue: Demo not accessible
+# Solution: Check ngrok tunnel status and firewall settings
+```
+
 ---
 
 ## 🎯 Best Practices
@@ -963,10 +1222,9 @@ This project is licensed under the MIT License.
   - [`run_docker_tests.sh`](run_docker_tests.sh) - Complete Docker test automation
   - [`open_report.sh`](open_report.sh) - Quick report viewer
   - [`test_runner.py`](test_runner.py) - Parallel test runner
-
-- **Test Documentation**:
-
-  - [`manual_test_cases.docx`](manual_test_cases.docx) - Manual test cases documentation
+  - [`parallel_runner.py`](parallel_runner.py) - Alternative parallel runner
+  - [`setup_demo.sh`](setup_demo.sh) - Live demo setup script
+  - [`demo_app_basic.py`](demo_app_basic.py) - Streamlit demo application
 
 - **Documentation**:
 
@@ -974,12 +1232,17 @@ This project is licensed under the MIT License.
   - [Selenium Documentation](https://selenium.dev/documentation/)
   - [Allure Framework](https://docs.qameta.io/allure/)
   - [Docker Documentation](https://docs.docker.com/)
+  - [Streamlit Documentation](https://docs.streamlit.io/)
+  - [Ngrok Documentation](https://ngrok.com/docs)
 
 - **Project Files**:
   - [`.env.example`](.env.example) - Environment configuration template
   - [`behave.ini`](behave.ini) - Behave framework settings
-  - [`Dockerfile`](Dockerfile) - Docker image configuration
+  - [`requirements.txt`](requirements.txt) - Python dependencies
+  - [`Dockerfile`](Dockerfile) - Docker image for tests
+  - [`Dockerfile.demo`](Dockerfile.demo) - Docker image for demo
   - [`docker-compose.yml`](docker-compose.yml) - Docker Compose setup
+  - [`docker-compose.demo.yml`](docker-compose.demo.yml) - Demo Docker Compose
 
 ---
 
@@ -987,18 +1250,25 @@ This project is licensed under the MIT License.
 
 This framework provides:
 
-✅ **Complete BDD Testing Solution** - 36 tests covering full e-commerce workflow
-✅ **Parallel Execution** - Run tests 4-8x faster with built-in parallel runner
+✅ **Complete BDD Testing Solution** - Comprehensive tests covering full e-commerce workflow
+✅ **Parallel Execution** - Run tests 4-8x faster with built-in parallel runners
 ✅ **Docker Support** - One-command execution with `./run_docker_tests.sh`
 ✅ **Beautiful Reports** - Interactive Allure reports with screenshots
+✅ **Live Demo** - Interactive Streamlit web UI for running tests
 ✅ **Easy to Use** - Helper scripts for common tasks
-✅ **CI/CD Ready** - GitHub Actions and Jenkins examples included
+✅ **Multi-Browser Support** - Chrome, Firefox, Edge, Safari
+✅ **Advanced Configuration** - Flexible settings via `.env` file
+✅ **CI/CD Ready** - Docker-based execution for easy integration
 ✅ **Well Documented** - Comprehensive README and inline documentation
 
 **Get Started in 30 Seconds:**
 
 ```bash
-./run_docker_tests.sh  # That's it!
+# Run all tests with Docker
+./run_docker_tests.sh
+
+# Or try the live demo
+./setup_demo.sh
 ```
 
 ---
@@ -1007,4 +1277,7 @@ This framework provides:
 
 ---
 
-_Last Updated: October 2024_
+**Author:** Daniel Izhar
+**Repository:** [github.com/dizhar/saucedemo-automation](https://github.com/dizhar/saucedemo-automation)
+
+_Last Updated: November 2024_
