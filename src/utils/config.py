@@ -88,13 +88,13 @@ class Config:
 
     # ==================== WAIT TIMEOUTS ====================
     # Default explicit wait timeout (seconds)
-    DEFAULT_TIMEOUT = int(os.getenv("DEFAULT_TIMEOUT", "10"))
+    DEFAULT_TIMEOUT = int(os.getenv("DEFAULT_TIMEOUT", "20"))
     
     # Implicit wait timeout (seconds)
-    IMPLICIT_WAIT = int(os.getenv("IMPLICIT_WAIT", "10"))
+    IMPLICIT_WAIT = int(os.getenv("IMPLICIT_WAIT", "20"))
     
     # Page load timeout (seconds)
-    PAGE_LOAD_TIMEOUT = int(os.getenv("PAGE_LOAD_TIMEOUT", "30"))
+    PAGE_LOAD_TIMEOUT = int(os.getenv("PAGE_LOAD_TIMEOUT", "60"))
     
     # Script timeout (seconds)
     SCRIPT_TIMEOUT = int(os.getenv("SCRIPT_TIMEOUT", "30"))
@@ -141,7 +141,7 @@ class Config:
     # Allure report
     ALLURE_REPORT = os.getenv("ALLURE_REPORT", "false").lower() == "true"
     ALLURE_RESULTS_DIR = REPORTS_DIR / "allure-results"
-    ALLURE_REPORT_DIR = REPORTS_DIR / "allure-report"
+    ALLURE_REPORT_DIR = REPORTS_DIR / "allure-reports"
     
     # HTML report
     HTML_REPORT = os.getenv("HTML_REPORT", "true").lower() == "true"
@@ -180,6 +180,25 @@ class Config:
     
     # Number of parallel workers
     PARALLEL_WORKERS = int(os.getenv("PARALLEL_WORKERS", "2"))
+
+
+    # ==================== BROWSER CONFIGURATION ====================
+    # Default browser
+    BROWSER = os.getenv("BROWSER", "chrome").lower()
+    
+    # Browser options
+    HEADLESS = os.getenv("HEADLESS", "false").lower() == "true"
+    MAXIMIZE_WINDOW = os.getenv("MAXIMIZE_WINDOW", "true").lower() == "true"
+    
+    # Browser window size (used when not maximized)
+    WINDOW_WIDTH = int(os.getenv("WINDOW_WIDTH", "1920"))
+    WINDOW_HEIGHT = int(os.getenv("WINDOW_HEIGHT", "1080"))
+    
+    # Remote Selenium Grid (Docker mode)
+    SELENIUM_REMOTE_URL = os.getenv("SELENIUM_REMOTE_URL", None)
+    
+    # Supported browsers
+    SUPPORTED_BROWSERS = ["chrome", "firefox", "edge", "safari"]
 
     # ==================== HELPER METHODS ====================
     @classmethod

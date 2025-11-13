@@ -29,7 +29,6 @@ def create_driver():
         # Remote Selenium Grid (Docker)
         logger.info(f"🌐 Connecting to remote Selenium: {remote_url}")
         
-        # Add options for remote
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--disable-gpu')
@@ -65,10 +64,16 @@ def create_driver():
         chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
         
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        
-        logger.info("✅ Local WebDriver created successfully")
+        # ✅ Try Selenium Manager first (built into Selenium 4.6+)
+        try:
+            driver = webdriver.Chrome(options=chrome_options)
+            logger.info("✅ Local WebDriver created via Selenium Manager")
+        except Exception as e:
+            logger.warning(f"Selenium Manager failed ({e}); falling back to webdriver_manager")
+            driver_path = ChromeDriverManager().install()
+            service = Service(driver_path)
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+            logger.info("✅ Local WebDriver created via webdriver_manager fallback")
     
     # Set implicit wait
     implicit_wait = int(os.getenv('IMPLICIT_WAIT', '10'))

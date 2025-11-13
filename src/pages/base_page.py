@@ -30,8 +30,9 @@ class BasePage:
         self.driver.implicitly_wait(timeout)  # Set implicit wait globally
         self.wait = WebDriverWait(driver, timeout)
         self.actions = ActionChains(driver)
-        self.base_url = config.BASE_URL
+        self.base_url = config.Config.get_base_url()
 
+        
     def find_element(self, locator: Tuple, timeout: Optional[float] = None) -> WebElement:
         """
         Find a single element with explicit wait

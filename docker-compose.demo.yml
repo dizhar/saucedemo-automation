@@ -1,0 +1,131 @@
+services:
+  selenium-hub:
+    image: seleniarm/hub:latest
+    ports:
+      - "4444:4444"
+    environment:
+      - SE_SESSION_REQUEST_TIMEOUT=300
+      - SE_NODE_SESSION_TIMEOUT=300
+    networks:
+      - demo-network
+
+  selenium-chrome-1:
+    image: seleniarm/node-chromium:latest
+    ports:
+      - "7900:7900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+      - SE_NODE_MAX_SESSIONS=1
+    shm_size: 2gb
+    networks:
+      - demo-network
+
+  selenium-chrome-2:
+    image: seleniarm/node-chromium:latest
+    ports:
+      - "7910:7900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+      - SE_NODE_MAX_SESSIONS=1
+    shm_size: 2gb
+    networks:
+      - demo-network
+
+  selenium-chrome-3:
+    image: seleniarm/node-chromium:latest
+    ports:
+      - "7920:7900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+      - SE_NODE_MAX_SESSIONS=1
+    shm_size: 2gb
+    networks:
+      - demo-network
+
+  # 🔹 NEW: node 4
+  selenium-chrome-4:
+    image: seleniarm/node-chromium:latest
+    ports:
+      - "7930:7900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+      - SE_NODE_MAX_SESSIONS=1
+    shm_size: 2gb
+    networks:
+      - demo-network
+
+  # 🔹 NEW: node 5
+  selenium-chrome-5:
+    image: seleniarm/node-chromium:latest
+    ports:
+      - "7940:7900"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+      - SE_NODE_MAX_SESSIONS=1
+    shm_size: 2gb
+    networks:
+      - demo-network
+
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.demo
+    ports:
+      - "8501:8501"
+      - "8666:8666"
+    depends_on:
+      - selenium-hub
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium-hub:4444
+      - HEADLESS=false
+      - IMPLICIT_WAIT=20
+      - PAGE_LOAD_TIMEOUT=60
+      - DEFAULT_TIMEOUT=20
+      - PARALLEL_WORKERS=3
+    volumes:
+      - ./features:/app/features
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./screenshots:/app/screenshots
+    networks:
+      - demo-network
+
+networks:
+  demo-network:
+    driver: bridge
